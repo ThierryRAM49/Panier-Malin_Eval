@@ -1,4 +1,4 @@
-// base de données produits
+//********  base de données des produits ************
 const produits = [
   {
     id: 1,
@@ -26,17 +26,24 @@ const produits = [
   },
 ];
 
+//******** Fin  base de données des produits ************
 
-// Panier en mémoire
+// Initialisation du panier
 let panier = [];
 
-// Éléments DOM
+// === Déclaration des variables des elements pour DOM ===
+
 const produitsContainer = document.getElementById('produits-container');
 const panierListe = document.getElementById('panier-liste');
 const montantTotal = document.getElementById('montant-total');
 const btnCommander = document.getElementById('btn-commander');
 const emailInput = document.getElementById('email-client');
 const messageFeedback = document.getElementById('message-feedback');
+
+// === Fin déclaration des variables des elements pour DOM ===
+
+
+
 
 // === Affichage des produits ===
 function afficherProduits() {
@@ -55,6 +62,10 @@ function afficherProduits() {
     });
 }
 
+// === Fin de l'affichage des produits ===
+
+
+
 // === Ajouter au panier ===
 function ajouterAuPanier(idProduit) {
     const produit = produits.find(p => p.id === idProduit);
@@ -69,44 +80,64 @@ function ajouterAuPanier(idProduit) {
     mettreAJourPanier();
 }
 
+// === Fin d' ajout au panier ===
+
+
+
+
 // === Supprimer du panier ===
 function supprimerDuPanier(idProduit) {
     panier = panier.filter(item => item.id !== idProduit);
     mettreAJourPanier();
 }
 
+// === Fin de Suppression du panier ===
+
+
+
 // === Mettre à jour l'affichage du panier ===
 function mettreAJourPanier() {
-    // Vider la liste
-    panierListe.innerHTML = '';
+  // Vider la liste
+  panierListe.innerHTML = "";
 
-    if (panier.length === 0) {
-        panierListe.innerHTML = '<p>Votre panier est vide.</p>';
-        montantTotal.textContent = '0.00';
-        return;
-    }
+  if (panier.length === 0) {
+    panierListe.innerHTML = "<p>Votre panier est vide.</p>";
+    montantTotal.textContent = "0.00";
+    return;
+  }
 
-    // Afficher chaque item
-    panier.forEach(item => {
-        const divItem = document.createElement('div');
-        divItem.classList.add('item-panier');
+  // Afficher chaque item
+  panier.forEach((item) => {
+    const divItem = document.createElement("div");
+    divItem.classList.add("item-panier");
 
-        const sousTotal = item.prix * item.quantite;
+    const sousTotal = item.prix * item.quantite;
 
-        divItem.innerHTML = `
+    divItem.innerHTML = `
             <span>${item.nom}</span>
             <span>${item.prix.toFixed(2)} €</span>
             <span>${item.quantite}</span>
             <span>${sousTotal.toFixed(2)} € <button data-id="${item.id}">✖</button></span>
         `;
 
-        panierListe.appendChild(divItem);
-    });
+    panierListe.appendChild(divItem);
+  });
 
-    // Calculer et afficher le total
-    const total = panier.reduce((sum, item) => sum + (item.prix * item.quantite), 0);
-    montantTotal.textContent = total.toFixed(2);
+  // === Fin de mise à jour de l'affichage du panier ===
+
+
+
+
+  // === Calculer et afficher le total ===
+  const total = panier.reduce(
+    (sum, item) => sum + item.prix * item.quantite,
+    0
+  );
+  montantTotal.textContent = total.toFixed(2);
 }
+
+// === Fin de Calcul pour afficher le total ===
+
 
 
 // === Validation de commande ===
@@ -129,11 +160,12 @@ function validerCommande() {
         messageFeedback.classList.add('error');
         return;
     }
-
+// approbation ou refus de la commande
     messageFeedback.textContent = 'Commande valide ! Un email de confirmation vous sera envoyé.';
-    messageFeedback.classList.add('success');
+    messageFeedback.classList.add('success'); //confirmation
 
-    // Effacer le panier
+
+    // === Effacer le panier ===
     panier = [];
     mettreAJourPanier();
 
@@ -145,7 +177,11 @@ function validerCommande() {
 afficherProduits();
 mettreAJourPanier();
 
-// Evenements
+
+
+// === Ecoutes  des evenements liés au panier ===
+
+// Evenements (activités)
 document.addEventListener('click', (e) => {
   //Boutton ajouter au panier
   if (e.target.matches('#produits-container button')) {
@@ -157,15 +193,19 @@ document.addEventListener('click', (e) => {
     const idProduit = parseInt(e.target.dataset.id);
     supprimerDuPanier(idProduit);
   }
-  // Boutton commander
+  // Ecoute du boutton validation de la commande
   btnCommander.addEventListener('click', validerCommande);
 });
 
-// Initialisation
+// === Fin de l'écoutes  des evenements liés au panier ===
+
+
+
+// Initialisation du panier
 function init() {
   afficherProduits();
   mettreAJourPanier();
 
-  // Effacer l'email
+  // Effacer l'email après rafraississement du navigateur
   emailInput.value = "";
 }
