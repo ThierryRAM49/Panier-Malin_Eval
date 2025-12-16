@@ -122,3 +122,50 @@ function validerCommande() {
         messageFeedback.classList.add('error');
         return;
     }
+// Vérifier email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        messageFeedback.textContent = 'Veuillez entrer une adresse email valide.';
+        messageFeedback.classList.add('error');
+        return;
+    }
+
+    messageFeedback.textContent = 'Commande valide ! Un email de confirmation vous sera envoyé.';
+    messageFeedback.classList.add('success');
+
+    // Effacer le panier
+    panier = [];
+    mettreAJourPanier();
+
+
+}
+
+
+// === Initialisation ===
+afficherProduits();
+mettreAJourPanier();
+
+// Evenements
+document.addEventListener('click', (e) => {
+  //Boutton ajouter au panier
+  if (e.target.matches('#produits-container button')) {
+    const idProduit = parseInt(e.target.dataset.id);
+    ajouterAuPanier(idProduit);
+  }
+  // Boutton supprimer du panier
+  if (e.target.matches('.item-panier button')) {
+    const idProduit = parseInt(e.target.dataset.id);
+    supprimerDuPanier(idProduit);
+  }
+  // Boutton commander
+  btnCommander.addEventListener('click', validerCommande);
+});
+
+// Initialisation
+function init() {
+  afficherProduits();
+  mettreAJourPanier();
+
+  // Effacer l'email
+  emailInput.value = "";
+}
