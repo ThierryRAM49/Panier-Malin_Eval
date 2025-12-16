@@ -108,6 +108,7 @@ function mettreAJourPanier() {
     montantTotal.textContent = total.toFixed(2);
 }
 
+
 // === Validation de commande ===
 function validerCommande() {
     messageFeedback.textContent = '';
@@ -121,42 +122,3 @@ function validerCommande() {
         messageFeedback.classList.add('error');
         return;
     }
-
-    // Regex email simple mais efficace
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailRegex.test(email)) {
-        messageFeedback.textContent = 'Veuillez entrer un email valide.';
-        messageFeedback.classList.add('error');
-        return;
-    }
-
-    // Succès
-    messageFeedback.textContent = `Commande validée ! Un email sera envoyé à ${email}.`;
-    messageFeedback.classList.add('success');
-
-    // Optionnel : vider le panier après commande
-    // panier = [];
-    // mettreAJourPanier();
-}
-
-// === Événements ===
-document.addEventListener('click', (e) => {
-    // Bouton "Ajouter au panier"
-    if (e.target.matches('#produits-container button')) {
-        const id = parseInt(e.target.dataset.id);
-        ajouterAuPanier(id);
-    }
-
-    // Bouton supprimer dans le panier
-    if (e.target.matches('.item-panier button')) {
-        const id = parseInt(e.target.dataset.id);
-        supprimerDuPanier(id);
-    }
-});
-
-// Bouton commander
-btnCommander.addEventListener('click', validerCommande);
-
-// Initialisation
-afficherProduits();
-mettreAJourPanier();
